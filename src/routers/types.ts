@@ -3,7 +3,7 @@ import { ReactElement } from "react";
 export interface LocationStates {
 	"/": {};
 	"/login"?: {};
-	"/signup"?: {};
+	"/register"?: {};
 }
 
 export type PathName = keyof LocationStates;

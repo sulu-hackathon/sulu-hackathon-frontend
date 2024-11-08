@@ -4,11 +4,13 @@ import { Page } from "./types";
 import ScrollToTop from "./ScrollToTop";
 // import Footer from "shared/Footer/Footer";
 import PageLogin from "../containers/PageLogin/PageLogin";
+import PageSignUp from "../containers/PageSignUp/PageSignUp";
 import SiteHeader from "../containers/SiteHeader";
 import Footer from "../shared/Footer/Footer";
 
 export const pages: Page[] = [
-	{ path: "/", component: <PageLogin /> },
+	{ path: "/login", component: <PageLogin /> },
+	{ path: "/register", component: <PageSignUp /> },
 	//
 ];
 

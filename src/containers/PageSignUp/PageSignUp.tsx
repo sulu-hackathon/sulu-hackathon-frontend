@@ -1,14 +1,22 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 // import facebookSvg from "images/Facebook.svg";
 // import twitterSvg from "images/Twitter.svg";
 // import googleSvg from "images/Google.svg";
 import { Helmet } from "react-helmet";
 import Input from "../../shared/Input/Input";
-import { Link } from "react-router-dom";
 import ButtonPrimary from "../../shared/Button/ButtonPrimary";
+import { Link } from "react-router-dom";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../utils/firebase";
 
-export interface PageLoginProps {
+export interface PageSignUpProps {
 	className?: string;
+}
+
+export interface SignupFormType {
+	email: string;
+	password: string;
+	e: React.FormEvent<HTMLFormElement>;
 }
 
 const loginSocials = [
@@ -29,18 +37,45 @@ const loginSocials = [
 	},
 ];
 
-const PageLogin: FC<PageLoginProps> = ({ className = "" }) => {
-	console.log("Login Page");
+const SignupWithEmail = async ({ e, email, password }: SignupFormType) => {
+	e.preventDefault();
+	if (!email || !password) {
+		console.error("Provide Email and Password");
+		return;
+	}
+	try {
+		const userCredential = await createUserWithEmailAndPassword(
+			auth,
+			email,
+			password
+		);
+
+		const user = userCredential.user;
+		console.log(user);
+
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	} catch (error: any) {
+		const errorCode = error.code;
+		const errorMessage = error.message;
+
+		console.log("errorCode:", errorCode, "errorMessage:", errorMessage);
+	}
+};
+
+const PageSignUp: FC<PageSignUpProps> = ({ className = "" }) => {
+	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
+
 	return (
-		<div className={`nc-PageLogin ${className}`} data-nc-id="PageLogin">
+		<div className={`nc-PageSignUp  ${className}`} data-nc-id="PageSignUp">
 			<Helmet>
-				<title>Login || Booking React Template</title>
+				<title>Sign up || Booking React Template</title>
 			</Helmet>
 			<div className="container mb-24 lg:mb-32">
 				<h2 className="my-20 flex items-center text-3xl leading-[115%] md:text-5xl md:leading-[115%] font-semibold text-neutral-900 dark:text-neutral-100 justify-center">
-					Login
+					Signup
 				</h2>
-				<div className="max-w-md mx-auto space-y-6">
+				<div className="max-w-md mx-auto space-y-6 ">
 					<div className="grid gap-3">
 						{loginSocials.map((item, index) => (
 							<a
@@ -67,12 +102,19 @@ const PageLogin: FC<PageLoginProps> = ({ className = "" }) => {
 						<div className="absolute left-0 w-full top-1/2 transform -translate-y-1/2 border border-neutral-100 dark:border-neutral-800"></div>
 					</div>
 					{/* FORM */}
-					<form className="grid grid-cols-1 gap-6" action="#" method="post">
+					<form
+						className="grid grid-cols-1 gap-6"
+						action="#"
+						method="post"
+						onSubmit={(e) => SignupWithEmail({ e, email, password })}
+					>
 						<label className="block">
 							<span className="text-neutral-800 dark:text-neutral-200">
 								Email address
 							</span>
 							<Input
+								onChange={(e) => setEmail(e.target.value)}
+								value={email}
 								type="email"
 								placeholder="example@example.com"
 								className="mt-1"
@@ -81,19 +123,21 @@ const PageLogin: FC<PageLoginProps> = ({ className = "" }) => {
 						<label className="block">
 							<span className="flex justify-between items-center text-neutral-800 dark:text-neutral-200">
 								Password
-								<Link to="/forgot-pass" className="text-sm">
-									Forgot password?
-								</Link>
 							</span>
-							<Input type="password" className="mt-1" />
+							<Input
+								type="password"
+								onChange={(e) => setPassword(e.target.value)}
+								value={password}
+								className="mt-1"
+							/>
 						</label>
 						<ButtonPrimary type="submit">Continue</ButtonPrimary>
 					</form>
 
 					{/* ==== */}
 					<span className="block text-center text-neutral-700 dark:text-neutral-300">
-						New user? {` `}
-						<Link to="/register">Create an account</Link>
+						Already have an account? {` `}
+						<Link to="/login">Sign in</Link>
 					</span>
 				</div>
 			</div>
@@ -101,4 +145,4 @@ const PageLogin: FC<PageLoginProps> = ({ className = "" }) => {
 	);
 };
 
-export default PageLogin;
+export default PageSignUp;
