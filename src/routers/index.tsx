@@ -7,10 +7,12 @@ import PageLogin from "../containers/PageLogin/PageLogin";
 import PageSignUp from "../containers/PageSignUp/PageSignUp";
 import SiteHeader from "../containers/SiteHeader";
 import Footer from "../shared/Footer/Footer";
+import Onboarding from "../containers/Onboarding/Onboarding";
 
 export const pages: Page[] = [
 	{ path: "/login", component: <PageLogin /> },
 	{ path: "/register", component: <PageSignUp /> },
+	{ path: "/onboarding", component: <Onboarding /> },
 	//
 ];
 
