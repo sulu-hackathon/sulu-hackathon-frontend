@@ -13,7 +13,7 @@ const Onboarding: React.FC = () => {
         image:""
     });
 
-    const onboardingSubmitHandler = (e:any) => {
+    const onboardingSubmitHandler = (e:Event) => {
         e.preventDefault();
         console.log(onboardingData);
         setOnboardingData({
