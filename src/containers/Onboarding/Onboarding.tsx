@@ -26,7 +26,7 @@ const Onboarding: React.FC = () => {
 
 	useEffect(() => {
 		const handler = setTimeout(() => {
-            if(onboardingData.instaID) setDebouncedInstaID(onboardingData.instaID);
+            setDebouncedInstaID(onboardingData.instaID);
 		}, 300); // 300ms debounce delay
 
 		return () => {
