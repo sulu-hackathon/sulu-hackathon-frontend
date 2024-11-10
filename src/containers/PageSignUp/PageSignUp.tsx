@@ -51,7 +51,7 @@ const SignupWithEmail = async ({ e, email, password }: SignupFormType) => {
 		);
 
 		const user = userCredential.user;
-		console.log(user);
+		window.location.href = "/onboarding";
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	} catch (error: any) {
