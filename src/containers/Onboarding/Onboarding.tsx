@@ -18,6 +18,7 @@ const Onboarding: React.FC = () => {
 		gender: "",
 		image: "",
 	});
+	const [imageName, setImageName] = useState(""); // New state for image name
 
 	const [debouncedInstaID, setDebouncedInstaID] = useState(
 		onboardingData.instaID
@@ -25,7 +26,7 @@ const Onboarding: React.FC = () => {
 
 	useEffect(() => {
 		const handler = setTimeout(() => {
-			setDebouncedInstaID(onboardingData.instaID);
+            if(onboardingData.instaID) setDebouncedInstaID(onboardingData.instaID);
 		}, 300); // 300ms debounce delay
 
 		return () => {
@@ -39,10 +40,10 @@ const Onboarding: React.FC = () => {
 		}
 	}, [debouncedInstaID]);
 
-	const makeApiCall = (query) => {
+	const makeApiCall = (inputInstagramID:string) => {
 		axios
 			.get(
-				`http://127.0.0.1:8000/instagram/validate_instagram/${onboardingData.instaID}/`
+				`http://127.0.0.1:8000/instagram/validate_instagram/${inputInstagramID}/`
 			)
 			.then((response) => {
 				console.log(response.data);
@@ -53,7 +54,7 @@ const Onboarding: React.FC = () => {
 			});
 	};
 
-	const onboardingSubmitHandler = (e: Event) => {
+	const onboardingSubmitHandler = (e: React.FormEvent): void => {
 		e.preventDefault();
 		console.log(onboardingData);
 		setOnboardingData({
@@ -65,11 +66,13 @@ const Onboarding: React.FC = () => {
 			gender: "",
 			image: "",
 		});
+		setImageName("");
 	};
 
 	const onDrop = (acceptedFiles: any) => {
 		const file = acceptedFiles[0];
 		setOnboardingData({ ...onboardingData, image: file });
+		setImageName(file.name);
 	};
 
 	const { getRootProps, getInputProps } = useDropzone({
@@ -83,6 +86,7 @@ const Onboarding: React.FC = () => {
 			index="01"
 			backtHref="/add-listing-1"
 			nextHref="/add-listing-2"
+            onSubmitHandler={() => onboardingSubmitHandler}
 		>
 			<>
 				<h2 className="text-2xl font-semibold">Onboarding</h2>
@@ -106,20 +110,56 @@ const Onboarding: React.FC = () => {
 						/>
 					</FormItem>
 					<FormItem label="Name" desc="Display name for the application">
-						<Input placeholder="Name" />
+						<Input 
+                            placeholder="Name" 
+                            value={onboardingData.name}
+                            onChange={(e) =>
+								setOnboardingData({
+									...onboardingData,
+									name: e.target.value,
+								})
+							}
+                        />
 					</FormItem>
 					<FormItem label="About" desc="A brief description about you">
-						<Textarea placeholder="..." rows={14} />
+						<Textarea 
+                            placeholder="..." 
+                            rows={14} 
+                            value={onboardingData.about}
+                            onChange={(e) =>
+								setOnboardingData({
+									...onboardingData,
+									about: e.target.value,
+								})
+							}
+                        />
 					</FormItem>
 					<NcInputNumber label="Age" defaultValue={18} />
 					<FormItem
 						label="Nationality"
 						desc="Your nationality or where you belong to"
 					>
-						<Input placeholder="Name" />
+						<Input 
+                            placeholder="Nationality" 
+                            value={onboardingData.nationality}
+                            onChange={(e) =>
+								setOnboardingData({
+									...onboardingData,
+									nationality: e.target.value,
+								})
+							}
+                        />
 					</FormItem>
 					<FormItem label="Gender" desc="">
-						<Select>
+						<Select
+                            value={onboardingData.gender}
+                            onChange={(e) =>
+								setOnboardingData({
+									...onboardingData,
+									gender: e.target.value,
+								})
+							}
+                        >
 							<option defaultValue="default" value="default"></option>
 							<option value="male">Male</option>
 							<option value="female">Female</option>
@@ -129,7 +169,7 @@ const Onboarding: React.FC = () => {
 					<div className="space-y-8">
 						<div>
 							<span className="text-lg font-semibold">Profile Picture</span>
-							<div className="mt-5 ">
+							<div className="mt-5">
 								<div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-neutral-300 dark:border-neutral-6000 border-dashed rounded-md">
 									<div className="space-y-1 text-center">
 										<svg
@@ -149,7 +189,7 @@ const Onboarding: React.FC = () => {
 										<div className="flex text-sm text-neutral-6000 dark:text-neutral-300">
 											<label
 												htmlFor="file-upload"
-												className="relative cursor-pointer  rounded-md font-medium text-primary-6000 hover:text-primary-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-primary-500"
+												className="relative cursor-pointer rounded-md font-medium text-primary-6000 hover:text-primary-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-primary-500"
 											>
 												<span>Upload a file</span>
 												<input
@@ -157,10 +197,16 @@ const Onboarding: React.FC = () => {
 													name="file-upload"
 													type="file"
 													className="sr-only"
+													{...getInputProps()}
 												/>
 											</label>
 											<p className="pl-1">or drag and drop</p>
 										</div>
+										{imageName && (
+											<p className="text-sm text-neutral-700 dark:text-neutral-300 mt-2">
+												Uploaded file: {imageName}
+											</p>
+										)}
 										<p className="text-xs text-neutral-500 dark:text-neutral-400">
 											PNG, JPG, GIF up to 10MB
 										</p>
