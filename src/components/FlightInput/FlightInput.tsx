@@ -31,32 +31,6 @@ const LocationInput: FC<LocationInputProps> = ({
 	const [value, setValue] = useState(defaultValue);
 	const [showPopover, setShowPopover] = useState(autoFocus);
 
-	const [loading, setLoading] = useState(true);
-
-	const [flightDates, setFlightDates] = useState([]);
-
-	useEffect(() => {
-		// Set a timeout to make the API call after 300 milliseconds
-		const handler = setTimeout(() => {
-			// Call the API here
-			axios
-				.get(`http://127.0.0.1:8000/flight/fetch_flight_details/${value}/`)
-				.then((response) => {
-					setFlightDates(response.data);
-					setLoading(false);
-					// Handle the data
-				})
-				.catch((error) => {
-					console.error("Error:", error);
-				});
-		}, 500);
-
-		// Clear the timeout if value changes again within the 300ms
-		return () => {
-			clearTimeout(handler);
-		};
-	}, [value]);
-
 	useEffect(() => {
 		setValue(defaultValue);
 	}, [defaultValue]);
@@ -107,17 +81,7 @@ const LocationInput: FC<LocationInputProps> = ({
 				<h3 className="block mt-2 sm:mt-0 px-4 sm:px-8 font-semibold text-base sm:text-lg text-neutral-800 dark:text-neutral-100">
 					Recent searches
 				</h3>
-				{loading && (
-					<div className="flex flex-row justify-center">
-						<MoonLoader
-							color={"#4338CA"}
-							loading={loading}
-							size={50}
-							aria-label="MoonLoader"
-							data-testid="loader"
-						/>
-					</div>
-				)}
+
 				<div className="mt-2">
 					{flightDates.map((item) => (
 						<span
@@ -253,11 +217,11 @@ const LocationInput: FC<LocationInputProps> = ({
 						)}
 					</div>
 				</div>
-				{showPopover && (
+				{/* {showPopover && (
 					<div className="absolute left-0 z-40 w-full min-w-[300px] sm:min-w-[500px] bg-white dark:bg-neutral-800 top-full mt-3 py-3 sm:py-6 rounded-3xl shadow-xl max-h-96 overflow-y-auto">
 						{value ? renderSearchValue() : renderRecentSearches()}
 					</div>
-				)}
+				)} */}
 			</div>
 		</>
 	);
