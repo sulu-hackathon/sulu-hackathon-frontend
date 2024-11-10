@@ -9,12 +9,14 @@ import SiteHeader from "../containers/SiteHeader";
 import Footer from "../shared/Footer/Footer";
 import Onboarding from "../containers/Onboarding/Onboarding";
 import Home from "../containers/Home/Home";
+import Profiles from "../containers/Profiles/Profiles";
 
 export const pages: Page[] = [
+	{ path: "/", component: <Home /> },
 	{ path: "/login", component: <PageLogin /> },
 	{ path: "/register", component: <PageSignUp /> },
 	{ path: "/onboarding", component: <Onboarding /> },
-	{ path: "/", component: <Home /> },
+	{ path: "/profiles", component: <Profiles /> },
 	//
 ];
 
