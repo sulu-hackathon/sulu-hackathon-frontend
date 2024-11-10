@@ -8,11 +8,13 @@ import PageSignUp from "../containers/PageSignUp/PageSignUp";
 import SiteHeader from "../containers/SiteHeader";
 import Footer from "../shared/Footer/Footer";
 import Onboarding from "../containers/Onboarding/Onboarding";
+import Home from "../containers/Home/Home";
 
 export const pages: Page[] = [
 	{ path: "/login", component: <PageLogin /> },
 	{ path: "/register", component: <PageSignUp /> },
 	{ path: "/onboarding", component: <Onboarding /> },
+	{ path: "/", component: <Home /> },
 	//
 ];
 

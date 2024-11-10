@@ -4,7 +4,7 @@ export interface LocationStates {
 	"/": {};
 	"/login"?: {};
 	"/register"?: {};
-	"/onboarding"?:{};
+	"/onboarding"?: {};
 }
 
 export type PathName = keyof LocationStates;
