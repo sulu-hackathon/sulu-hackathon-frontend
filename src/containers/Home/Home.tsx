@@ -69,7 +69,7 @@ const Home = () => {
 					modifiedData = modifiedData.map((item) => {
 						return {
 							...item,
-							flight_number: locationInputValue,
+							flight_number: locationInputValue || "EY45",
 						};
 					});
 
@@ -110,10 +110,6 @@ const Home = () => {
 			console.error("Error:", error);
 		}
 	};
-
-	console.log(flightData);
-
-	console.log("print from home: ", locationInputValue);
 
 	return (
 		<div className="pl-56 pr-56 pb-72">
@@ -158,10 +154,10 @@ const Home = () => {
 												/>
 											</svg>
 										</div>
-										<div>{item.date}</div>
+										{/* <div>{item.date}</div> */}
 										<div className="flex-1 space-y-6 py-1">
 											<div className="dark:bg-slate-700 bg-gray-400 rounded p-2">
-												Date: {item.departure_airport}
+												Date: {item.date}
 											</div>
 											<div className="space-y-3">
 												<div className="grid grid-cols-6 gap-3">

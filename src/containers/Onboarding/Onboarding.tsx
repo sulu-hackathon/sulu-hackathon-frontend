@@ -7,9 +7,6 @@ import FormItem from "../Froms/FormItem";
 import Textarea from "../../shared/Textarea/Textarea";
 import NcInputNumber from "../../components/NcInputNumber/NcInputNumber";
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
-import ButtonPrimary from "../../shared/Button/ButtonPrimary";
-import ButtonSecondary from "../../shared/Button/ButtonSecondary";
 
 const Onboarding: React.FC = () => {
 	const [onboardingData, setOnboardingData] = useState({
@@ -21,23 +18,22 @@ const Onboarding: React.FC = () => {
 		gender: "",
 		image: "",
 	});
-	const [imageName, setImageName] = useState(""); // New state for image name
-	const notify = () => toast("Wow so easy!");
+	const [imageName, setImageName] = useState("");
 	const [instaIdError, setInstaIdError] = useState(false);
 
 	const [debouncedInstaID, setDebouncedInstaID] = useState(
-		onboardingData.instaID
+		onboardingData.instaid
 	);
 
 	useEffect(() => {
 		const handler = setTimeout(() => {
-			setDebouncedInstaID(onboardingData.instaID);
-		}, 300); // 300ms debounce delay
+			setDebouncedInstaID(onboardingData.instaid);
+		}, 500); // 300ms debounce delay
 
 		return () => {
 			clearTimeout(handler);
 		};
-	}, [onboardingData.instaID]);
+	}, [onboardingData.instaid]);
 
 	useEffect(() => {
 		if (debouncedInstaID) {
@@ -62,7 +58,6 @@ const Onboarding: React.FC = () => {
 
 	const onboardingSubmitHandler = async (e: React.FormEvent): void => {
 		e.preventDefault();
-		console.log(onboardingData);
 		const base64Data = await convertFileToBase64(onboardingData.image);
 		axios
 			.post(`http://127.0.0.1:8000/account/create-user/`, {
@@ -91,12 +86,6 @@ const Onboarding: React.FC = () => {
 		maxFiles: 1,
 	});
 
-	useEffect(() => {
-		if (instaIdError) {
-			notify();
-		}
-	}, [instaIdError]);
-
 	function convertFileToBase64(file) {
 		return new Promise((resolve, reject) => {
 			const reader = new FileReader();
@@ -118,7 +107,6 @@ const Onboarding: React.FC = () => {
 			onSubmitHandler={onboardingSubmitHandler}
 		>
 			<>
-				<ToastContainer />
 				<h2 className="text-2xl font-semibold">Onboarding</h2>
 				<div className="w-14 border-b border-neutral-200 dark:border-neutral-700"></div>
 				{/* FORM */}
@@ -131,7 +119,7 @@ const Onboarding: React.FC = () => {
 						<Input
 							placeholder="Instagram ID"
 							className={instaIdError ? "dark:border-red-500" : ""}
-							value={onboardingData.instaID}
+							value={onboardingData.instaid}
 							onChange={(e) =>
 								setOnboardingData({
 									...onboardingData,

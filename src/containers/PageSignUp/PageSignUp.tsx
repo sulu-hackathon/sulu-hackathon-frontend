@@ -2,6 +2,7 @@ import React, { FC, useState } from "react";
 // import facebookSvg from "images/Facebook.svg";
 // import twitterSvg from "images/Twitter.svg";
 // import googleSvg from "images/Google.svg";
+import instagramSvg from "../../assets/images/instagram.svg";
 import { Helmet } from "react-helmet";
 import Input from "../../shared/Input/Input";
 import ButtonPrimary from "../../shared/Button/ButtonPrimary";
@@ -21,19 +22,9 @@ export interface SignupFormType {
 
 const loginSocials = [
 	{
-		name: "Continue with Facebook",
+		name: "Continue with Instagram",
 		href: "#",
-		// icon: facebookSvg,
-	},
-	{
-		name: "Continue with Twitter",
-		href: "#",
-		// icon: twitterSvg,
-	},
-	{
-		name: "Continue with Google",
-		href: "#",
-		// icon: googleSvg,
+		icon: instagramSvg,
 	},
 ];
 
@@ -70,7 +61,7 @@ const PageSignUp: FC<PageSignUpProps> = ({ className = "" }) => {
 	return (
 		<div className={`nc-PageSignUp  ${className}`} data-nc-id="PageSignUp">
 			<Helmet>
-				<title>Sign up || Booking React Template</title>
+				<title>Sign up || Boarding Together</title>
 			</Helmet>
 			<div className="container mb-24 lg:mb-32">
 				<h2 className="my-20 flex items-center text-3xl leading-[115%] md:text-5xl md:leading-[115%] font-semibold text-neutral-900 dark:text-neutral-100 justify-center">
@@ -82,11 +73,12 @@ const PageSignUp: FC<PageSignUpProps> = ({ className = "" }) => {
 							<a
 								key={index}
 								href={item.href}
-								className="nc-will-change-transform flex w-full rounded-lg bg-primary-50 dark:bg-neutral-800 px-4 py-3 transform transition-transform sm:px-6 hover:translate-y-[-2px]"
+								className="nc-will-change-transform items-center flex w-full rounded-lg bg-primary-50 dark:bg-neutral-800 px-4 py-3 transform transition-transform sm:px-6 hover:translate-y-[-2px]"
 							>
 								<img
 									className="flex-shrink-0"
-									// src={item.icon}
+									width={40}
+									src={item.icon}
 									alt={item.name}
 								/>
 								<h3 className="flex-grow text-center text-sm font-medium text-neutral-700 dark:text-neutral-300 sm:text-sm">
