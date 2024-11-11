@@ -132,7 +132,7 @@ const Home = () => {
 								onClick={(e) =>
 									updateUserFlightDetails(
 										flightData[i].date,
-										flightData[i].flight_number
+										flightData[i].flight_number || "EY45"
 									)
 								}
 							>
