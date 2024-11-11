@@ -8,7 +8,7 @@ export interface CommonLayoutProps {
 	nextHref: string;
 	backtHref: string;
 	nextBtnText?: string;
-	onSubmitHandler:() => void;
+	onSubmitHandler: () => void;
 }
 
 const CommonLayout: FC<CommonLayoutProps> = ({
@@ -17,7 +17,7 @@ const CommonLayout: FC<CommonLayoutProps> = ({
 	nextHref,
 	nextBtnText,
 	backtHref,
-	onSubmitHandler
+	onSubmitHandler,
 }) => {
 	return (
 		<div
@@ -37,8 +37,8 @@ const CommonLayout: FC<CommonLayoutProps> = ({
 
 				{/* --------------------- */}
 				<div className="flex justify-end space-x-5">
-					<ButtonSecondary href={backtHref}>Go back</ButtonSecondary>
-					<ButtonPrimary href={nextHref} onClick={() => onSubmitHandler}>
+					<ButtonSecondary>Go back</ButtonSecondary>
+					<ButtonPrimary onClick={onSubmitHandler}>
 						{nextBtnText || "Continue"}
 					</ButtonPrimary>
 				</div>

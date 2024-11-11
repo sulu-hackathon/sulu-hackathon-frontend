@@ -101,10 +101,10 @@ const Home = () => {
 					// Data to send in the POST request
 					flight_number: flightNumber,
 					flight_date: date,
-					ussid: "unique_user_id1",
+					ussid: localStorage.getItem("ussid"),
 				})
 				.then((res) => {
-					window.location.href = "/login";
+					window.location.href = "/profiles";
 				});
 		} catch (error) {
 			console.error("Error:", error);

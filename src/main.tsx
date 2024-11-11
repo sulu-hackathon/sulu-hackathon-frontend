@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import "./styles/index.scss";
 import "./index.css";
 import App from "./App.tsx";
+import "react-toastify/dist/ReactToastify.css";
 
 createRoot(document.getElementById("root")!).render(
 	<StrictMode>

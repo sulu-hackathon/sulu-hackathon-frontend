@@ -7,18 +7,23 @@ import FormItem from "../Froms/FormItem";
 import Textarea from "../../shared/Textarea/Textarea";
 import NcInputNumber from "../../components/NcInputNumber/NcInputNumber";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import ButtonPrimary from "../../shared/Button/ButtonPrimary";
+import ButtonSecondary from "../../shared/Button/ButtonSecondary";
 
 const Onboarding: React.FC = () => {
 	const [onboardingData, setOnboardingData] = useState({
-		instaID: "",
+		instaid: "",
 		name: "",
-		about: "",
-		dob: "",
+		bio: "",
+		age: "",
 		nationality: "",
 		gender: "",
 		image: "",
 	});
 	const [imageName, setImageName] = useState(""); // New state for image name
+	const notify = () => toast("Wow so easy!");
+	const [instaIdError, setInstaIdError] = useState(false);
 
 	const [debouncedInstaID, setDebouncedInstaID] = useState(
 		onboardingData.instaID
@@ -26,7 +31,7 @@ const Onboarding: React.FC = () => {
 
 	useEffect(() => {
 		const handler = setTimeout(() => {
-            setDebouncedInstaID(onboardingData.instaID);
+			setDebouncedInstaID(onboardingData.instaID);
 		}, 300); // 300ms debounce delay
 
 		return () => {
@@ -40,33 +45,38 @@ const Onboarding: React.FC = () => {
 		}
 	}, [debouncedInstaID]);
 
-	const makeApiCall = (inputInstagramID:string) => {
+	const makeApiCall = (inputInstagramID: string) => {
 		axios
 			.get(
 				`http://127.0.0.1:8000/instagram/validate_instagram/${inputInstagramID}/`
 			)
 			.then((response) => {
 				console.log(response.data);
-				// Handle the data
+				setInstaIdError(false);
+			})
+			.catch((error) => {
+				console.error("Error:", error);
+				setInstaIdError(true);
+			});
+	};
+
+	const onboardingSubmitHandler = async (e: React.FormEvent): void => {
+		e.preventDefault();
+		console.log(onboardingData);
+		const base64Data = await convertFileToBase64(onboardingData.image);
+		axios
+			.post(`http://127.0.0.1:8000/account/create-user/`, {
+				...onboardingData,
+				picture: base64Data,
+				ussid: localStorage.getItem("ussid"),
+			})
+			.then((response) => {
+				console.log(response.data);
+				window.location.href = "/";
 			})
 			.catch((error) => {
 				console.error("Error:", error);
 			});
-	};
-
-	const onboardingSubmitHandler = (e: React.FormEvent): void => {
-		e.preventDefault();
-		console.log(onboardingData);
-		setOnboardingData({
-			instaID: "",
-			name: "",
-			about: "",
-			dob: "",
-			nationality: "",
-			gender: "",
-			image: "",
-		});
-		setImageName("");
 	};
 
 	const onDrop = (acceptedFiles: any) => {
@@ -81,14 +91,34 @@ const Onboarding: React.FC = () => {
 		maxFiles: 1,
 	});
 
+	useEffect(() => {
+		if (instaIdError) {
+			notify();
+		}
+	}, [instaIdError]);
+
+	function convertFileToBase64(file) {
+		return new Promise((resolve, reject) => {
+			const reader = new FileReader();
+
+			reader.onload = () => resolve(reader.result); // Resolve with Base64 data
+			reader.onerror = (error) => reject(error); // Reject on error
+
+			reader.readAsDataURL(file); // Start reading the file as Data URL
+		});
+	}
+
+	console.log("insta id error", instaIdError);
+
 	return (
 		<CommonLayout
 			index="01"
 			backtHref="/add-listing-1"
 			nextHref="/add-listing-2"
-            onSubmitHandler={() => onboardingSubmitHandler}
+			onSubmitHandler={onboardingSubmitHandler}
 		>
 			<>
+				<ToastContainer />
 				<h2 className="text-2xl font-semibold">Onboarding</h2>
 				<div className="w-14 border-b border-neutral-200 dark:border-neutral-700"></div>
 				{/* FORM */}
@@ -100,66 +130,76 @@ const Onboarding: React.FC = () => {
 					>
 						<Input
 							placeholder="Instagram ID"
+							className={instaIdError ? "dark:border-red-500" : ""}
 							value={onboardingData.instaID}
 							onChange={(e) =>
 								setOnboardingData({
 									...onboardingData,
-									instaID: e.target.value,
+									instaid: e.target.value,
 								})
 							}
 						/>
 					</FormItem>
 					<FormItem label="Name" desc="Display name for the application">
-						<Input 
-                            placeholder="Name" 
-                            value={onboardingData.name}
-                            onChange={(e) =>
+						<Input
+							placeholder="Name"
+							value={onboardingData.name}
+							onChange={(e) =>
 								setOnboardingData({
 									...onboardingData,
 									name: e.target.value,
 								})
 							}
-                        />
+						/>
 					</FormItem>
 					<FormItem label="About" desc="A brief description about you">
-						<Textarea 
-                            placeholder="..." 
-                            rows={14} 
-                            value={onboardingData.about}
-                            onChange={(e) =>
+						<Textarea
+							placeholder="..."
+							rows={14}
+							value={onboardingData.about}
+							onChange={(e) =>
 								setOnboardingData({
 									...onboardingData,
-									about: e.target.value,
+									bio: e.target.value,
 								})
 							}
-                        />
+						/>
 					</FormItem>
-					<NcInputNumber label="Age" defaultValue={18} />
+					<NcInputNumber
+						label="Age"
+						defaultValue={18}
+						onChange={(e) => {
+							setOnboardingData({
+								...onboardingData,
+								age: e,
+							});
+						}}
+					/>
 					<FormItem
 						label="Nationality"
 						desc="Your nationality or where you belong to"
 					>
-						<Input 
-                            placeholder="Nationality" 
-                            value={onboardingData.nationality}
-                            onChange={(e) =>
+						<Input
+							placeholder="Nationality"
+							value={onboardingData.nationality}
+							onChange={(e) =>
 								setOnboardingData({
 									...onboardingData,
 									nationality: e.target.value,
 								})
 							}
-                        />
+						/>
 					</FormItem>
 					<FormItem label="Gender" desc="">
 						<Select
-                            value={onboardingData.gender}
-                            onChange={(e) =>
+							value={onboardingData.gender}
+							onChange={(e) =>
 								setOnboardingData({
 									...onboardingData,
 									gender: e.target.value,
 								})
 							}
-                        >
+						>
 							<option defaultValue="default" value="default"></option>
 							<option value="male">Male</option>
 							<option value="female">Female</option>

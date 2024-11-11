@@ -51,6 +51,7 @@ const SignupWithEmail = async ({ e, email, password }: SignupFormType) => {
 		);
 
 		const user = userCredential.user;
+		localStorage.setItem("ussid", user.uid);
 		window.location.href = "/onboarding";
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
